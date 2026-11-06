@@ -56,11 +56,11 @@ button,a{font:inherit}
 .toast{position:absolute;z-index:1000;right:16px;bottom:calc(var(--nav-height) + env(safe-area-inset-bottom) + 10px);left:16px;width:max-content;max-width:calc(100% - 32px);margin:auto;padding:10px 14px;border-radius:12px;background:#192720ed;color:white;text-align:center;font-size:11px;opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s}
 .toast.show{opacity:1;transform:translateY(0)}
 .app-view[hidden]{display:none!important}
-.content-view{position:absolute;inset:0 0 calc(var(--nav-height) + env(safe-area-inset-bottom));display:grid;place-items:center;overflow-y:auto;padding:calc(68px + env(safe-area-inset-top)) 18px 22px;background:linear-gradient(160deg,#eaf1eb,#f6f7f4 58%,#e9f1eb)}
-.welcome-card,.account-card{width:min(100%,430px);padding:27px 23px;border:1px solid #ffffffc9;border-radius:25px;background:#ffffffed;box-shadow:0 14px 45px #20342612;text-align:center}
+.content-view{position:absolute;inset:0 0 calc(var(--nav-height) + env(safe-area-inset-bottom));display:grid;place-items:center;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:calc(68px + env(safe-area-inset-top)) 18px 22px;background:linear-gradient(160deg,#eaf1eb,#f6f7f4 58%,#e9f1eb)}
+.account-card{width:min(100%,430px);padding:27px 23px;border:1px solid #ffffffc9;border-radius:25px;background:#ffffffed;box-shadow:0 14px 45px #20342612;text-align:center}
 .welcome-symbol{display:grid;width:58px;height:58px;margin:0 auto 20px;place-items:center;border-radius:19px;background:#e6f1e8;color:var(--green);font-size:32px}
-.welcome-card>.eyebrow,.account-card>.eyebrow{margin-bottom:8px}
-.welcome-card h1,.account-card h1{margin:0 0 11px;font-size:clamp(29px,8vw,39px);font-weight:800;letter-spacing:-.06em;line-height:1.07}
+.account-card>.eyebrow{margin-bottom:8px}
+.account-card h1{margin:0 0 11px;font-size:clamp(29px,8vw,39px);font-weight:800;letter-spacing:-.06em;line-height:1.07}
 .welcome-copy{max-width:320px;margin:0 auto 22px;color:#718078;font-size:13px;line-height:1.6}
 .field-label{display:block;margin:0 0 7px;text-align:left;color:#53645a;font-size:11px;font-weight:700}
 .name-input{display:block;width:100%;height:49px;padding:0 14px;border:1px solid #dfe8e0;border-radius:12px;background:#fbfcfb;color:var(--ink);font:inherit;font-size:16px;outline:none}
@@ -78,6 +78,6 @@ button,a{font:inherit}
 .pf-marker-shell{background:none;border:0}.pf-marker{display:grid;width:33px;height:33px;place-items:center;border:3px solid white;border-radius:50% 50% 50% 4px;box-shadow:0 2px 8px #0005;color:#fff;font-size:13px;font-weight:800;transform:rotate(-45deg)}.marker-park{background:#267653}.marker-you{background:#438ec3}
 .map-message{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:22px;text-align:center;color:#3d5747}.map-message strong{font-size:15px}.map-message span{max-width:270px;color:#74817b;font-size:12px;line-height:1.5}
 [hidden]{display:none!important}
-@media(max-width:380px){.topbar{left:9px;right:9px}.privacy{padding:8px;font-size:9px}.route-card{right:7px;left:7px;padding-right:13px;padding-left:13px}.welcome-card,.account-card{padding:22px 18px}.content-view{padding-right:13px;padding-left:13px}.save-button{font-size:14px}}
-@media(min-width:700px){body{display:grid;place-items:center;background:#e9eeea}.app{width:min(100%,520px);height:min(920px,100dvh);border:1px solid #dfe7df;border-radius:28px;box-shadow:0 20px 70px #20342622}.topbar{top:12px}.route-card{bottom:12px}.map-view{bottom:calc(var(--nav-height) + 12px)}.bottom-nav{border-radius:0 0 28px 28px}}
+@media(max-width:380px){.topbar{left:9px;right:9px}.privacy{padding:8px;font-size:9px}.route-card{right:7px;left:7px;padding-right:13px;padding-left:13px}.account-card{padding:22px 18px}.content-view{padding-right:13px;padding-left:13px}.save-button{font-size:14px}}
+@media(min-width:700px){body{display:grid;place-items:center;background:#e9eeea}.app{width:min(100%,1440px);height:100dvh;border:0;border-radius:0;box-shadow:none}.topbar{top:16px;left:20px;right:20px}.route-card{right:24px;bottom:24px;left:auto;width:min(440px,calc(100% - 48px))}.map-view{bottom:var(--nav-height)}.bottom-nav{border-radius:0}}
 @media(max-height:700px){.route-card{padding-top:5px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}.sheet-handle{height:10px;margin-bottom:4px}.route-metrics{margin-top:8px;padding:8px}.status{margin:4px 0}.save-button,.directions-button{min-height:48px;height:48px}.directions-button{width:48px;flex-basis:48px}.choose-button{margin-top:2px;padding:4px}.map-top-overlay{top:calc(53px + env(safe-area-inset-top))}}

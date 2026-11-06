@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#f6f7f4">
   <meta name="description" content="Save your parking spot and find your way back.">
   <title>ParkFind — Your parking spot</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="mobile-navigation.css">
   <script src="script.js" defer></script>
@@ -14,7 +15,6 @@
   <main class="app">
     <header class="topbar">
       <a class="brand" href="#map" data-tab-link="map" aria-label="ParkFind map"><span class="brand-mark"><img src="icons/Logo.png" alt=""></span><span>ParkFind</span></a>
-      <span class="privacy"><span class="privacy-dot"></span> Saved privately</span>
     </header>
 
     <section id="map-view" class="app-view map-view is-visible" aria-label="Parking map">
@@ -58,45 +58,165 @@
     </section>
 
     <section id="home-view" class="app-view content-view" aria-labelledby="home-title" hidden>
-      <div class="welcome-card">
+      <header class="home-header">
         <div class="welcome-symbol" aria-hidden="true"><img src="icons/map.png" alt=""></div><p class="eyebrow">Your parking companion</p>
         <h1 id="home-title">Welcome<span id="home-name"></span>.</h1>
-        <p class="welcome-copy">Save where you parked and get walking directions back to your car. Your spots stay on this device.</p>
-        <label class="field-label" for="name-input">Your name <span>(optional)</span></label>
-        <input id="name-input" class="name-input" type="text" maxlength="32" autocomplete="name" placeholder="Name">
-        <button id="save-name-button" class="wide-button" type="button">Save name on this device</button>
-        <p class="fine-print">No account is needed. Sign-up is not available yet.</p>
-        <button class="text-action" type="button" data-open-tab="map">Open parking map <span aria-hidden="true">→</span></button>
+        <p class="welcome-copy">Save where you parked and get walking directions back to your car. Your spots are saved on this device only.</p>
+      </header>
+      <div id="home-overview-panel">
+        <section class="home-spot-card" aria-labelledby="home-spot-heading">
+          <div class="home-spot-top"><span class="home-spot-icon" aria-hidden="true">P</span><div><p class="eyebrow">Your parking spot</p><h2 id="home-spot-heading">No spot saved yet</h2></div></div>
+          <p id="home-spot-detail" class="home-spot-detail">Save your location on the map to find your car later.</p>
+          <button class="home-spot-action" type="button" data-open-tab="map"><span id="home-spot-action-label">Save a parking spot</span><span aria-hidden="true">→</span></button>
+        </section>
+        <div class="home-shortcuts" aria-label="Quick links">
+          <button class="home-shortcut" type="button" data-open-tab="recents"><span class="home-shortcut-icon"><img src="icons/recents.png" alt=""></span><span><strong>Recent spots</strong><small id="home-recent-count">No saved spots yet</small></span><span class="home-shortcut-arrow" aria-hidden="true">›</span></button>
+          <button class="home-shortcut" type="button" data-open-tab="map"><span class="home-shortcut-icon"><img src="icons/map.png" alt=""></span><span><strong>Explore map</strong><small>Choose a parking spot</small></span><span class="home-shortcut-arrow" aria-hidden="true">›</span></button>
+          <button class="home-shortcut" type="button" data-open-tab="more/settings"><span class="home-shortcut-icon"><img src="icons/settings.png" alt=""></span><span><strong>Settings</strong><small>Personalize your app</small></span><span class="home-shortcut-arrow" aria-hidden="true">›</span></button>
+          <button class="home-shortcut" type="button" data-open-tab="more/reviews"><span class="home-shortcut-icon"><img src="icons/Reveiws.png" alt=""></span><span><strong>Reviews</strong><small>Share your feedback</small></span><span class="home-shortcut-arrow" aria-hidden="true">›</span></button>
+        </div>
+        <section class="home-stats" aria-label="Parking overview">
+          <div class="home-info-card"><span class="home-info-icon" aria-hidden="true">P</span><span><small>Saved spot</small><strong id="home-saved-status">Not saved</strong></span></div>
+          <div class="home-info-card"><span class="home-info-icon home-info-icon-recents" aria-hidden="true"><img src="icons/recents.png" alt=""></span><span><small>Recent spots</small><strong id="home-saved-count">0 spots</strong></span></div>
+        </section>
+        <section class="home-latest-card" aria-labelledby="home-latest-title">
+          <div class="home-section-heading"><h2 id="home-latest-title">Recently parked</h2><button class="home-inline-link" type="button" data-open-tab="recents">View all</button></div>
+          <div id="home-recent-preview" class="home-recent-preview"></div>
+          <p id="home-recent-empty" class="home-recent-empty">Your saved parking spots will show up here.</p>
+        </section>
+        <section class="parking-tip-card" aria-labelledby="parking-tip-title">
+          <div class="parking-tip-mark" aria-hidden="true">i</div>
+          <div class="parking-tip-copy"><p class="eyebrow">Parking tip</p><h2 id="parking-tip-title">Make it easy to remember</h2><p id="parking-tip-text">Save your spot as soon as you park so it is ready when you need it.</p></div>
+          <button id="next-parking-tip" class="tip-next" type="button" aria-label="Show another parking tip">↻</button>
+        </section>
+        <section class="home-checklist-card" aria-labelledby="home-checklist-title">
+          <div class="home-section-heading"><h2 id="home-checklist-title">Before you walk away</h2><span>Quick checklist</span></div>
+          <ul class="parking-checklist">
+            <li><span aria-hidden="true">1</span><div><strong>Save your parking spot</strong><small>Use your location or pick the exact place on the map.</small></div></li>
+            <li><span aria-hidden="true">2</span><div><strong>Remember your level or section</strong><small>A floor, row, or nearby landmark makes it easier to find your car.</small></div></li>
+            <li><span aria-hidden="true">3</span><div><strong>Check signs and time limits</strong><small>Follow posted parking rules before heading out.</small></div></li>
+          </ul>
+        </section>
       </div>
     </section>
 
     <section id="recents-view" class="app-view content-view" aria-labelledby="recents-title" hidden>
       <div class="recents-panel">
-        <div class="recents-heading"><div><p class="eyebrow">Saved on this device</p><h1 id="recents-title">Recent spots</h1></div><button id="clear-recents" class="clear-recents" type="button" hidden>Clear</button></div>
-        <p class="recents-copy">Your latest parking spots are stored privately in this browser.</p>
+        <div class="recents-heading"><div><p class="eyebrow">Saved</p><h1 id="recents-title">Recent spots</h1></div><button id="clear-recents" class="clear-recents" type="button" hidden>Clear</button></div>
+        <p class="recents-copy">Your latest parking spots are saved on this device only.</p>
         <div id="recent-list" class="recent-list"></div>
         <p id="empty-recents" class="empty-recents"><span aria-hidden="true"><img src="icons/recents.png" alt=""></span><strong>No recent spots yet</strong><small>Save a parking spot and it will appear here.</small><button class="text-action" type="button" data-open-tab="map">Go to map →</button></p>
       </div>
     </section>
 
-    <section id="account-view" class="app-view content-view" aria-labelledby="account-title" hidden>
-      <div class="account-card">
-        <p class="eyebrow">Your profile</p><div id="profile-avatar" class="profile-avatar" aria-label="Guest profile image">G</div>
-        <h1 id="account-title">Guest</h1><p id="account-subtitle" class="welcome-copy">You’re using ParkFind without an account.</p>
-        <div class="account-info"><span class="account-info-icon" aria-hidden="true">⌂</span><span><strong>Guest mode</strong><small>Your parking spots are saved only in this browser.</small></span></div>
-        <button class="wide-button disabled-button" type="button" disabled>Sign in — coming later</button>
-        <p class="fine-print">Account sign-in and profile photos are not available yet. Set a name on the Home tab.</p>
-        <button class="text-action" type="button" data-open-tab="home">Open Home <span aria-hidden="true">→</span></button>
+    <section id="settings-view" class="app-view content-view" aria-labelledby="settings-title" hidden>
+      <div class="more-subpage">
+        <header class="subpage-heading"><p class="eyebrow">Personalize ParkFind</p><div class="subpage-title"><img class="subpage-icon" src="icons/settings.png" alt=""><h1 id="settings-title">Settings</h1></div><p>These preferences are saved on this device only.</p></header>
+        <section class="settings-card" aria-labelledby="personalize-title">
+          <div class="home-section-heading"><h2 id="personalize-title">App preferences</h2><span>On this device only</span></div>
+          <h3 class="settings-group-title">Map &amp; navigation</h3>
+          <label class="field-label" for="distance-units">Distance units</label>
+          <select id="distance-units" class="name-input setting-select">
+            <option value="metric">Meters and kilometers</option>
+            <option value="imperial">Feet and miles</option>
+          </select>
+          <label class="setting-row" for="follow-location-setting"><span><strong>Follow me while walking</strong><small>Keep the map centered on your live location.</small></span><input id="follow-location-setting" type="checkbox"></label>
+          <label class="setting-row" for="zoom-controls-setting"><span><strong>Map zoom buttons</strong><small>Show plus and minus controls on the map.</small></span><input id="zoom-controls-setting" type="checkbox"></label>
+          <h3 class="settings-group-title">Recent spots</h3>
+          <label class="field-label" for="recent-limit-setting">Spots to keep</label>
+          <select id="recent-limit-setting" class="name-input setting-select">
+            <option value="5">5 recent spots</option>
+            <option value="10">10 recent spots</option>
+            <option value="20">20 recent spots</option>
+          </select>
+          <label class="setting-row" for="show-coordinates-setting"><span><strong>Show spot coordinates</strong><small>Display latitude and longitude in your recent spots.</small></span><input id="show-coordinates-setting" type="checkbox"></label>
+          <label class="setting-row" for="confirm-remove-setting"><span><strong>Confirm before removing a spot</strong><small>Ask before forgetting your saved parking spot.</small></span><input id="confirm-remove-setting" type="checkbox"></label>
+          <label class="setting-row" for="confirm-clear-recents-setting"><span><strong>Confirm before clearing recents</strong><small>Ask before deleting your recent spot history.</small></span><input id="confirm-clear-recents-setting" type="checkbox"></label>
+          <h3 class="settings-group-title">Display</h3>
+          <div class="setting-slider">
+            <label class="field-label" for="ui-zoom-setting"><strong>UI Zoom</strong><output id="ui-zoom-label" for="ui-zoom-setting">100%</output></label>
+            <input id="ui-zoom-setting" class="intensity-slider ui-zoom-slider" type="range" min="80" max="120" step="5" value="100" aria-describedby="ui-zoom-help">
+            <div class="slider-endpoints" aria-hidden="true"><span>Smaller</span><span>Larger</span></div>
+            <p id="ui-zoom-help" class="setting-help">Adjust the size of the app interface. Default is 100%.</p>
+          </div>
+          <label class="setting-row" for="24-hour-time-setting"><span><strong>24-hour time</strong><small>Use 24-hour time for saved spot dates.</small></span><input id="24-hour-time-setting" type="checkbox"></label>
+          <label class="setting-row" for="expanded-navigation-setting"><span><strong>Expanded navigation</strong><small>Show More pages as tabs on wider screens.</small></span><input id="expanded-navigation-setting" type="checkbox"></label>
+          <label class="field-label" for="animation-mode-setting">Animation mode</label>
+          <select id="animation-mode-setting" class="name-input setting-select">
+            <option value="normal">Normal</option>
+            <option value="super">Super</option>
+            <option value="reduced">Reduced</option>
+          </select>
+          <div id="super-animation-controls" class="setting-slider">
+            <label class="field-label" for="super-animations-setting"><strong>Super animation intensity</strong><output id="super-animation-level-label" for="super-animations-setting">5 / 10</output></label>
+            <input id="super-animations-setting" class="intensity-slider" type="range" min="1" max="10" step="1" value="5" aria-describedby="super-animation-help">
+            <div class="slider-endpoints" aria-hidden="true"><span>Subtle</span><span>MAX!</span></div>
+            <p id="super-animation-help" class="setting-help">Slide higher for bigger, faster, bouncier effects throughout the app.</p>
+          </div>
+        </section>
       </div>
     </section>
 
-    <nav class="bottom-nav" aria-label="Main navigation">
+    <section id="reviews-view" class="app-view content-view" aria-labelledby="reviews-title" hidden>
+      <div class="more-subpage">
+        <section class="home-reviews-panel" aria-labelledby="reviews-title">
+          <div class="reviews-heading"><span class="reviews-icon" aria-hidden="true"><img src="icons/Reveiws.png" alt=""></span><div><p class="eyebrow">Share your experience</p><h1 id="reviews-title">ParkFind reviews</h1></div></div>
+          <p class="reviews-copy">Have a suggestion or feedback? Reviews are for signed-in account holders.</p>
+          <div class="review-access-card">
+            <span class="review-lock" aria-hidden="true">A</span>
+            <div><strong>Account required</strong><p>Sign in to write a review. Account sign-in is not available yet.</p></div>
+          </div>
+          <button class="wide-button review-signin-button" type="button" data-open-tab="more/profile">Go to Profile &amp; account</button>
+          <p class="fine-print">A guest profile or saved name does not count as an account.</p>
+        </section>
+      </div>
+    </section>
+
+    <section id="profile-view" class="app-view content-view" aria-labelledby="account-title" hidden>
+      <div class="more-subpage">
+        <section class="account-card profile-card">
+          <p class="eyebrow">Your profile</p><div id="profile-avatar" class="profile-avatar" aria-label="Guest profile image">G</div>
+          <h1 id="account-title">Guest</h1><p id="account-subtitle" class="welcome-copy">You’re using ParkFind without an account.</p>
+          <div class="account-info"><span class="account-info-icon" aria-hidden="true">⌂</span><span><strong>Guest mode</strong><small>Your parking spots are saved on this device only.</small></span></div>
+          <section class="settings-card profile-name-card" aria-labelledby="display-name-title">
+            <div class="home-section-heading"><h2 id="display-name-title">Display name</h2><span>Optional</span></div>
+            <label class="field-label" for="name-input">Name shown in the app</label>
+            <input id="name-input" class="name-input" type="text" maxlength="32" autocomplete="name" placeholder="Name">
+            <button id="save-name-button" class="wide-button" type="button">Save name</button>
+            <p class="fine-print">Your name is saved on this device only.</p>
+          </section>
+          <button class="wide-button disabled-button" type="button" disabled>Sign in — coming later</button>
+          <p class="fine-print">Account sign-in and profile photos are not available yet.</p>
+        </section>
+      </div>
+    </section>
+
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Main navigation">
       <button class="nav-item is-active" type="button" data-tab="map" aria-current="page"><img class="nav-map-icon" src="icons/map.png" alt=""><span>Map</span></button>
       <button class="nav-item" type="button" data-tab="home"><span class="nav-icon" aria-hidden="true"><img src="icons/Home.png" alt=""></span><span>Home</span></button>
-      <button class="nav-item" type="button" data-tab="recents"><span class="nav-icon" aria-hidden="true"><img src="icons/recents.png" alt=""></span><span>Recents</span></button>
-      <button class="nav-item" type="button" data-tab="account"><span class="nav-icon" aria-hidden="true"><img src="icons/account.png" alt=""></span><span>Account</span></button>
+      <button id="secondary-nav-trigger" class="nav-item" type="button" data-tab="recents"><span id="secondary-nav-icon" class="nav-icon" aria-hidden="true"><img src="icons/recents.png" alt=""></span><span id="secondary-nav-label">Recents</span></button>
+      <button class="nav-item more-page-nav" type="button" data-tab="more/settings" data-nav-extra="1"><span class="nav-icon" aria-hidden="true"><img src="icons/settings.png" alt=""></span><span>Settings</span></button>
+      <button class="nav-item more-page-nav" type="button" data-tab="more/reviews" data-nav-extra="2"><span class="nav-icon" aria-hidden="true"><img src="icons/Reveiws.png" alt=""></span><span>Reviews</span></button>
+      <button class="nav-item more-page-nav" type="button" data-tab="more/profile" data-nav-extra="3"><span class="nav-icon" aria-hidden="true"><img src="icons/account.png" alt=""></span><span>Profile</span></button>
+      <button id="more-trigger" class="nav-item" type="button" data-tab="more" aria-haspopup="menu" aria-expanded="false" aria-controls="more-dropdown"><span class="nav-icon nav-more-icon" aria-hidden="true"><img src="icons/more.png" alt=""></span><span>More</span></button>
     </nav>
+    <div id="more-dropdown" class="more-dropdown" role="menu" aria-label="More options" hidden>
+      <p class="more-dropdown-heading">More</p>
+      <button class="more-menu-item" type="button" role="menuitem" data-open-tab="more/settings">Settings</button>
+      <button class="more-menu-item" type="button" role="menuitem" data-open-tab="more/reviews">Reviews</button>
+      <button class="more-menu-item" type="button" role="menuitem" data-open-tab="more/profile">Profile &amp; account</button>
+    </div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="super-animation-burst" class="super-burst" aria-hidden="true" hidden>
+      <div class="super-burst__halo"></div>
+      <span class="super-burst__spark super-burst__spark--one">✦</span>
+      <span class="super-burst__spark super-burst__spark--two">✦</span>
+      <span class="super-burst__spark super-burst__spark--three">✦</span>
+      <span class="super-burst__spark super-burst__spark--four">✦</span>
+      <span class="super-burst__spark super-burst__spark--five">✦</span>
+      <div class="super-burst__title">SUPER MODE!</div>
+      <div class="super-burst__caption">ParkFind just got a little more fun</div>
+    </div>
   </main>
 </body>
 </html>
