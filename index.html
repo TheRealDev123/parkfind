@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f4">
+  <meta name="description" content="Save your parking spot and find your way back.">
+  <title>ParkFind — Your parking spot</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mobile-navigation.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="#map" data-tab-link="map" aria-label="ParkFind map"><span class="brand-mark"><img src="icons/Logo.png" alt=""></span><span>ParkFind</span></a>
+      <span class="privacy"><span class="privacy-dot"></span> Saved privately</span>
+    </header>
+
+    <section id="map-view" class="app-view map-view is-visible" aria-label="Parking map">
+      <div id="map" class="map" aria-label="Interactive map. Drag to move and pinch to zoom."></div>
+      <div class="map-top-overlay">
+        <div class="map-location-pill"><span class="live-dot"></span><span id="map-location-label">Finding your location…</span></div>
+        <button id="locate-button" class="map-fab" type="button" aria-label="Show overview of your location and parking spot" title="Show overview">◎</button>
+      </div>
+      <div class="map-credit">© OpenStreetMap</div>
+
+      <section id="route-card" class="route-card" aria-label="Parking route">
+        <button id="sheet-toggle" class="sheet-handle" type="button" aria-expanded="true" aria-controls="route-content" aria-label="Collapse parking details"><span></span></button>
+        <div id="route-content">
+          <div class="route-heading">
+            <div class="route-icon" aria-hidden="true">P</div>
+            <div class="route-copy"><p class="eyebrow">Your parking spot</p><h1 id="saved-title">Not saved yet</h1></div>
+            <button id="clear-button" class="clear-button" type="button" hidden aria-label="Forget saved spot">×</button>
+          </div>
+          <p id="saved-details" class="coordinates">Save your current location or choose a spot on the map.</p>
+          <p id="saved-time" class="saved-time" hidden></p>
+          <div class="route-metrics">
+            <div class="metric-icon" aria-hidden="true">↗</div>
+            <div class="metric-copy"><p class="metric-title" id="distance-details">Ready when you are</p><p id="current-details" class="metric-subtitle">Waiting for your current location…</p></div>
+            <span id="accuracy" class="accuracy"></span>
+          </div>
+          <div id="guidance-card" class="guidance-card" hidden>
+            <div class="guidance-arrow-wrap"><span id="guidance-arrow" class="guidance-arrow" aria-hidden="true">↑</span></div>
+            <div class="guidance-copy"><p id="guidance-title" class="guidance-title">Walking route</p><p id="guidance-detail" class="guidance-detail">Preparing your route…</p><p id="guidance-note" class="guidance-note">Follow the blue route on the map.</p></div>
+            <button id="stop-guidance" class="stop-guidance" type="button">Stop</button>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite">Requesting location permission…</p>
+          <div class="action-row">
+            <button id="save-button" class="save-button" type="button"><span class="save-icon" aria-hidden="true">＋</span><span id="save-label">Save parking spot</span></button>
+            <button id="start-guidance" class="start-guidance" type="button" disabled><img class="walking-logo" src="icons/Logo.png" alt=""><span id="guidance-button-label">Start walking</span></button>
+          </div>
+          <a id="maps-link" class="external-link" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open in Google Maps ↗</a>
+          <button id="choose-button" class="choose-button" type="button" aria-pressed="false">Choose a different spot on the map</button>
+          <p id="map-hint" class="map-hint">Drag to explore, pinch to zoom, or choose a spot manually.</p>
+        </div>
+      </section>
+    </section>
+
+    <section id="home-view" class="app-view content-view" aria-labelledby="home-title" hidden>
+      <div class="welcome-card">
+        <div class="welcome-symbol" aria-hidden="true"><img src="icons/map.png" alt=""></div><p class="eyebrow">Your parking companion</p>
+        <h1 id="home-title">Welcome<span id="home-name"></span>.</h1>
+        <p class="welcome-copy">Save where you parked and get walking directions back to your car. Your spots stay on this device.</p>
+        <label class="field-label" for="name-input">Your name <span>(optional)</span></label>
+        <input id="name-input" class="name-input" type="text" maxlength="32" autocomplete="name" placeholder="Name">
+        <button id="save-name-button" class="wide-button" type="button">Save name on this device</button>
+        <p class="fine-print">No account is needed. Sign-up is not available yet.</p>
+        <button class="text-action" type="button" data-open-tab="map">Open parking map <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section id="recents-view" class="app-view content-view" aria-labelledby="recents-title" hidden>
+      <div class="recents-panel">
+        <div class="recents-heading"><div><p class="eyebrow">Saved on this device</p><h1 id="recents-title">Recent spots</h1></div><button id="clear-recents" class="clear-recents" type="button" hidden>Clear</button></div>
+        <p class="recents-copy">Your latest parking spots are stored privately in this browser.</p>
+        <div id="recent-list" class="recent-list"></div>
+        <p id="empty-recents" class="empty-recents"><span aria-hidden="true"><img src="icons/recents.png" alt=""></span><strong>No recent spots yet</strong><small>Save a parking spot and it will appear here.</small><button class="text-action" type="button" data-open-tab="map">Go to map →</button></p>
+      </div>
+    </section>
+
+    <section id="account-view" class="app-view content-view" aria-labelledby="account-title" hidden>
+      <div class="account-card">
+        <p class="eyebrow">Your profile</p><div id="profile-avatar" class="profile-avatar" aria-label="Guest profile image">G</div>
+        <h1 id="account-title">Guest</h1><p id="account-subtitle" class="welcome-copy">You’re using ParkFind without an account.</p>
+        <div class="account-info"><span class="account-info-icon" aria-hidden="true">⌂</span><span><strong>Guest mode</strong><small>Your parking spots are saved only in this browser.</small></span></div>
+        <button class="wide-button disabled-button" type="button" disabled>Sign in — coming later</button>
+        <p class="fine-print">Account sign-in and profile photos are not available yet. Set a name on the Home tab.</p>
+        <button class="text-action" type="button" data-open-tab="home">Open Home <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item is-active" type="button" data-tab="map" aria-current="page"><img class="nav-map-icon" src="icons/map.png" alt=""><span>Map</span></button>
+      <button class="nav-item" type="button" data-tab="home"><span class="nav-icon" aria-hidden="true"><img src="icons/Home.png" alt=""></span><span>Home</span></button>
+      <button class="nav-item" type="button" data-tab="recents"><span class="nav-icon" aria-hidden="true"><img src="icons/recents.png" alt=""></span><span>Recents</span></button>
+      <button class="nav-item" type="button" data-tab="account"><span class="nav-icon" aria-hidden="true"><img src="icons/account.png" alt=""></span><span>Account</span></button>
+    </nav>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+</body>
+</html>
